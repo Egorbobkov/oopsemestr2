@@ -16,6 +16,12 @@ Rational::Rational(const Rational& myRat) {
     num = myRat.num;
     denom = myRat.denom;
 }
+
+Rational operator-(const Rational rhs) {
+    return (rhs * Rational(-1, 1));
+}
+
+
 Rational::Rational(const int32_t numInp,
                    const int32_t denomInp) {
     reducing();
@@ -110,44 +116,42 @@ bool Rational::isNegative() const {
     return num < 0;
 }
 
-std::ostream& operator<<(std::ostream& ostrm,
-                         const Rational& rhs) {
-    return rhs.writeTo(ostrm);
-}
 std::istream& operator>>(std::istream& istrm,
                          Rational& rhs) {
     return rhs.readFrom(istrm);
 }
 
+
 Rational& operator+(Rational& rhs) {
     return rhs;
 }
-Rational& operator-(Rational& rhs) {
-    Rational tmp;
-    tmp -= rhs;
-    return tmp;
-}
 
-Rational operator+(Rational lhs, const Rational& rhs) { // these use assignment analogs
-    lhs += rhs;
-    return lhs;
+
+Rational operator+(Rational lhs, const Rational& rhs) {
+    Rational a = lhs;
+    a += rhs;
+    return a;
 }
 Rational operator-(Rational lhs, const Rational& rhs) {
-    lhs -= rhs;
-    return lhs;
+    Rational a = lhs;
+    a -= rhs;
+    return a;
 }
 Rational operator*(Rational lhs, const Rational& rhs) {
-    lhs *= rhs;
-    return lhs;
+    Rational a = lhs;
+    a *= rhs;
+    return a;
 }
 Rational operator/(Rational lhs, const Rational& rhs) {
-    lhs /= rhs;
-    return lhs;
+    Rational a = lhs;
+    a /= rhs;
+    return a;
 }
 Rational operator%(Rational lhs, const Rational& rhs)
 {
-    lhs %= rhs;
-    return lhs;
+    Rational a = lhs;
+    a %= rhs;
+    return a;
 }
 
 Rational sqr(Rational myRat) {
@@ -207,30 +211,38 @@ void Rational::reducing() {  // always reduce to optimize space
     denom /= dev;
 }
 
-std::ostream& Rational::writeTo(std::ostream& ostrm) const
-{
-    ostrm << num << slash << denom;
+std::ostream& operator<<(std::ostream& ostrm, const Rational& rhs) {
+    return rhs.writeTo(ostrm);
+}
+
+std::ostream& Rational::writeTo(std::ostream& ostrm) const noexcept {
+    ostrm << num/gcd(std::abs(num), denom) << slash << denom/ gcd(std::abs(num), denom);
     return ostrm;
 }
 
-std::istream& Rational::readFrom(std::istream& istrm)
-{
-    int32_t numInp(0);
-    char separator(0);
-    int32_t denomInp(0);
-    istrm >> numInp >> separator >> denomInp;
-    if (istrm.good()) {
-        if (Rational::slash == separator) {
-            if (denomInp <= 0) {
-                throw std::invalid_argument("Expected positive denominator");
-            }
-            num = numInp;
-            denom = denomInp;
-            reducing();
-        }
-        else {
-            istrm.setstate(std::ios_base::failbit);
-        }
+std::istream& Rational::readFrom(std::istream& istrm) { //������� ��������� ���������� separator_, num_, denum_
+    char separator_(0);
+    int32_t num_(0);
+    int32_t denum_(0);
+    istrm >> num_ >> std::noskipws >> separator_ >> std::skipws >> std::noskipws >> denum_;
+    if(denum_ < 0){
+        istrm.setstate(std::ios_base::failbit);
+
     }
-    return istrm;
+    //istrm - ������ �� ����� ������, ��������� ������ �� ����������
+    if (istrm.good() || istrm.eof() && !istrm.fail()) {
+        if (int(separator_) == 47 ) {
+            istrm.clear();
+            *this = Rational(num_, denum_);
+            if (denom < 0) {
+                denom *= -1;
+                num *= -1;
+            }
+        }
+        //else {
+        //  istrm.setstate(std::ios_base::failbit);
+        //}
+
+        return istrm;
+    }
 }
