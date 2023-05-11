@@ -1,0 +1,9 @@
+# ninja log v5
+1	395	1679230387182711110	prj.lab/rational/CMakeFiles/rational.dir/rational.cpp.o	946254424bc72d26
+1	908	1679230387694498435	prj.test/CMakeFiles/rational_test.dir/rational_test.cpp.o	b519a2172eb90a1f
+396	948	1679230387738628000	prj.lab/rational/librational.a	3742659bb193fcfa
+948	991	1679230387781421776	/Users/egor/Documents/GitHub/trufmanov_m_a/trufmanov_m_a/bin.dbg/rational_test	f225ce80633b0789
+2	1004	1679230437958925363	prj.test/CMakeFiles/rational_test.dir/rational_test.cpp.o	b519a2172eb90a1f
+1004	1087	1679230438048751444	/Users/egor/Documents/GitHub/trufmanov_m_a/trufmanov_m_a/bin.dbg/rational_test	f225ce80633b0789
+5	813	1679230450143160761	prj.test/CMakeFiles/rational_test.dir/rational_test.cpp.o	b519a2172eb90a1f
+813	850	1679230450185040749	/Users/egor/Documents/GitHub/trufmanov_m_a/trufmanov_m_a/bin.dbg/rational_test	f225ce80633b0789
